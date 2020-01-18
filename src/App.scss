@@ -1,0 +1,27 @@
+.base {
+  margin: 1rem;
+}
+
+.container {
+  display: flex;
+
+  div {
+    margin: .5rem;
+  }
+
+  &.center {
+    justify-content: center;
+  }
+
+  .login_fields {
+    flex-direction: column;
+
+    input {
+      padding: 5px;
+    }
+  }
+}
+
+.input_title {
+  width: 25%;
+}

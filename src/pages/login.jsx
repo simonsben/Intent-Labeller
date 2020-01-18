@@ -10,10 +10,16 @@ class Login extends Component {
         };
 
         this.input_change = this.input_change.bind(this);
+        this.submit = this.submit.bind(this);
     }
 
     input_change = (state_key, new_value) => {
         this.setState({...this.state, [state_key]: new_value.target.value});
+    }
+
+    submit = () => {
+        const {user, password} = this.state;
+        this.props.login(user, password);
     }
 
     render() {
@@ -28,6 +34,10 @@ class Login extends Component {
                     <div><h1>Enter user id and password here.</h1></div>
                     <InputField value={state.user} on_change={user_change} name={'user id'}/>
                     <InputField value={state.password} on_change={pass_change} name={'password'} input_type='password'/>
+                    
+                    <div className='form_submit'>
+                        <input type='button' value='Submit' onClick={this.submit}/>
+                    </div>
                 </div>
             </div>
         );

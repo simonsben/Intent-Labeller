@@ -30,3 +30,36 @@
   display: flex;
   justify-content: center;
 }
+
+.context {
+  z-index: 2;
+}
+
+.marking_window {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: absolute;
+}
+
+.marking_label {
+  width: 33%;
+  height: 100%;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+
+  div {
+    margin-bottom: 40%;
+    width: 100%;
+    text-align: center;
+  }
+
+  &:hover {
+    background-color: rgba(52, 125, 235, .5);
+  }
+}

@@ -4,28 +4,27 @@ const init_state = {
     index: 0,
     contexts: [],
     intent_labels: [],
-    abuse_labels: []
+    abuse_labels: [],
+    current_tuple: {}
 };
 
 const label_map = {
     'doesn\'t contain': 0,
-    'unsure if it contains': -1,
     'contains': 1
 };
 const labels = Object.keys(label_map);
 
-const generate_labeller = (is_intent, add_label) => {
-    const target_label = ' ' + (is_intent? 'intent' : 'abuse');
-    
+const generate_labeller = (target_label, add_label, selected=null) => {   
+
     return (
         <div key={target_label}>
             {
                 labels.map(label => (
                     <div 
-                        className='marking_label' 
-                        onClick={() => add_label(true, label)} 
+                        className={'marking_label ' + ((selected === label)? 'selected' : '')} 
+                        onClick={() => add_label(target_label, label)} 
                         key={label + target_label}>
-                            <div>{label + target_label}</div>
+                            <div>{label + ' ' + target_label}</div>
                     </div>
                 ))
             }
@@ -50,29 +49,29 @@ class Label extends Component {
 
     update_contexts = new_contexts => this.setState({...init_state, contexts: new_contexts});
 
-    add_label = (is_intent, label) => {
+    add_label = (target_label, label) => {
         const {state} = this;
+        let { current_tuple } = state;
 
-        let {intent_labels, abuse_labels, index} = state;
+        current_tuple[target_label] = label;
 
-        const current_labels = is_intent? intent_labels : abuse_labels
-        const alternate_labels = is_intent? abuse_labels : intent_labels;
-        
-        current_labels.push(label);
+        if (Object.keys(current_tuple).length >= 2) {
+            let { abuse_labels, intent_labels } = state;
+            abuse_labels.push(current_tuple.abuse);
+            intent_labels.push(current_tuple.intent);
 
-        if (current_labels.length === alternate_labels.length) {
-            index++;
-            console.log('bumping index', index);
+            current_tuple = {};
+            this.setState({ ...state, current_tuple, abuse_labels, intent_labels });
         }
-
-        const target = is_intent? 'intent_labels' : 'abuse_labels';
-        this.setState({...state, [target]: labels, index});
+        this.setState({...state, current_tuple});
     }
     
 
     render() {
         const {state, add_label} = this;
-        const context = state.index >= state.contexts.length? null : state.contexts[state.index];
+        const index = state.intent_labels.length;
+        const context = index >= state.contexts.length? null : state.contexts[index];
+        console.log(state.index, context);
 
         if (!context) this.make_request();
 
@@ -82,7 +81,7 @@ class Label extends Component {
                     !context? null :
                     <div className='marking_window'>
                         {
-                            [true, false].map(variant => generate_labeller(variant, add_label))
+                            ['intent', 'abuse'].map(variant => generate_labeller(variant, add_label, state.current_tuple[variant]))
                         }
                     </div>
                 }

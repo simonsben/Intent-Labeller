@@ -2,7 +2,7 @@
 -- Author:        Ben
 -- Caption:       New Model
 -- Project:       Name of the project
--- Changed:       2020-02-18 16:21
+-- Changed:       2020-02-18 16:37
 -- Created:       2020-01-19 20:55
 PRAGMA foreign_keys = OFF;
 
@@ -16,7 +16,7 @@ CREATE TABLE "labelling_database"."user"(
     UNIQUE("user_id")
 );
 CREATE TABLE "labelling_database"."context"(
-  "context_id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  "context_id" INTEGER PRIMARY KEY NOT NULL,
   "document_id" INTEGER NOT NULL,
   "context_index" INTEGER NOT NULL,
   "content" VARCHAR(3000) NOT NULL,

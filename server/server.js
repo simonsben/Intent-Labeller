@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-    console.log('Login post request');
+    res.send({is_good: true});
 });
 
 app.listen(process.env.PORT || 8080);

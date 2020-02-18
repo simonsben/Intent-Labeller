@@ -1,5 +1,8 @@
 #1/bin/bash
 
+# Move back up
+cd ../
+
 # Download sqlite
 wget -O sqlite.tar.gz https://www.sqlite.org/2019/sqlite-autoconf-3300100.tar.gz
 

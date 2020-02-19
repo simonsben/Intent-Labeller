@@ -1,13 +1,13 @@
 const { queries } = require('./queries');
 const { parse } = require('papaparse');
-const sqlite3 = require('sqlite3').verbose();
-const { read_file } = require('./utilities');
+const { Database } = require('sqlite3').verbose();
+const { read_file, error_thrower } = require('./utilities');
 
 const max_size = 3000;
 const data_file = 'subset'
 
 // Open database
-const db = new sqlite3.Database('./labelling_database.sdb');
+const db = new Database('./labelling_database.sdb');
 
 let context_mapping = read_file('../data/' + data_file + '_map.csv');
 let contexts = read_file('../data/' + data_file + 's.csv');
@@ -39,17 +39,11 @@ Promise.all([context_mapping, contexts])
             const package = [index, document_id, context_index, context];
 
             // Insert data
-            query.run(package, e => {
-                if (e)
-                    console.error(e);
-            });    
+            query.run(package, error_thrower);
             context_index++;
         });
         // Ensure execution and close database
         query.finalize();        
         db.close();
     })
-    .catch(e => {
-        if (e)
-            console.error(e);
-    });
+    .catch(error_thrower);

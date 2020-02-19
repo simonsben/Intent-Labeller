@@ -6,7 +6,7 @@ const parse_config = {
     dynamicTyping: true
 };
 
-const read_file = (filename, encoding='utf8', parse_data=true) => {
+const read_file = (filename, parse_data=true, encoding='utf8') => {
     let file_reading = new Promise((resolve, reject) => {
         readFile(filename, encoding, (e, data) => {
             if (e)
@@ -23,8 +23,12 @@ const read_file = (filename, encoding='utf8', parse_data=true) => {
     return file_reading;
 };
 
-
+const error_thrower = e => {
+    if (e)
+        console.error(e);
+};
 
 module.exports = {
-    read_file
+    read_file,
+    error_thrower
 };

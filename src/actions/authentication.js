@@ -1,10 +1,10 @@
-import {post} from 'axios';
+import { post } from 'axios';
 import { SHA3 } from 'sha3';
 
 const hasher = new SHA3(512);
 
 const authenticate = (user_id, password) => {
-    const payload = {user_id, password: hasher.digest(password)};
+    const payload = { user_id, password: hasher.digest(password) };
     console.log('Authentication payload', payload);
 
     post('/login', payload)
@@ -13,7 +13,7 @@ const authenticate = (user_id, password) => {
 
     // TODO change to res.auth_token
     return 'auth_token';
-}
+};
 
 export {
     authenticate

@@ -28,7 +28,12 @@ const error_thrower = e => {
         console.error(e);
 };
 
+const empty_promise = () => (
+    new Promise((resolve, reject) => resolve())
+);
+
 module.exports = {
     read_file,
-    error_thrower
+    error_thrower,
+    empty_promise
 };

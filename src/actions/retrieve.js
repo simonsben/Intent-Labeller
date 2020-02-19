@@ -17,17 +17,15 @@ const request_text = (update_callback, labels=null) => {
     const payload = { auth_token, labels };
 
     get('/get_content', { params: payload })
-        .then(response => {
-            const { contexts } = response.data;
-            console.log('content response', contexts);
+        .then(({ data }) => {
+            if ('complete' in data)
+                update_callback(null);
 
+            const { contexts } = data;
             update_callback(contexts);
-            request_in_progress = false;
         })
-        .catch(e => {
-            console.error(e);
-            request_in_progress = false;
-        });
+        .catch(e => console.error(e))
+        .finally(() => { request_in_progress = false; })
 };
 
 export {

@@ -76,14 +76,22 @@ class Label extends Component {
         }
         this.setState({...state, current_tuple});
     }
+
+    is_done = () => !!this.state.contexts;
     
 
     render() {
-        const {state, add_label} = this;
+        const { state, add_label, is_done } = this;
         const index = state.intent_labels.length;
-        const context = index >= state.contexts.length? null : state.contexts[index];
 
-        if (!context) this.make_request();
+        if (is_done())
+            return (
+                <div>Wow, looks like you're done!</div>
+            );
+
+        const context = (is_done() || index >= state.contexts.length)? null : state.contexts[index];
+
+        if (!state.done && !context) this.make_request();
 
         return (
             <Fragment>

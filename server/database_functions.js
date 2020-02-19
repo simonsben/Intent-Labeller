@@ -86,7 +86,6 @@ let database_handler = {
         if (!labels)
             return empty_promise();
                 
-        console.log('Adding labels.');
         // Get visit id
         return database_handler.get(queries.get_visit, [ user_id ])
             // For each label
@@ -132,6 +131,12 @@ let database_handler = {
             })
             // Send contexts back to client
             .then(contexts => {
+                // If no more data, send complete.
+                if (contexts.length == 0) {
+                    response.send({ complete: true });
+                    return;
+                }
+
                 contexts = contexts.map(context => context.content);
                 response.send({ contexts });
             })

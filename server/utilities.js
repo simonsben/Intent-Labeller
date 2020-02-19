@@ -25,7 +25,7 @@ const read_file = (filename, parse_data=true, encoding='utf8') => {
 
 const error_thrower = e => {
     if (e)
-        console.error(e);
+        console.log(e);
 };
 
 const empty_promise = () => (

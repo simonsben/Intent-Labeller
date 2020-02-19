@@ -1,5 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import { request_text } from '../actions/retrieve';
+import { deep_copy } from '../actions/utilities';
 
 const init_state = {
     index: 0,
@@ -10,8 +11,8 @@ const init_state = {
 };
 
 const label_map = {
-    'doesn\'t contain': 0,
-    'contains': 1
+    'doesn\'t contain': 'POSITIVE',
+    'contains': 'NEGATIVE'
 };
 const labels = Object.keys(label_map);
 
@@ -37,25 +38,33 @@ class Label extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {...init_state};
+        this.state = deep_copy(init_state);
         this.update_contexts = this.update_contexts.bind(this);
         this.add_label = this.add_label.bind(this);
     }
 
     make_request = () => {
         const {contexts, intent_labels, abuse_labels} = this.state;
-        const previous = contexts.length === 0? null : {intent_labels, abuse_labels};
-        // this.props.make_request(previous, this.update_contexts);
-        request_text(this.update_contexts);
+        let labels = null;
+        if (contexts.length > 0)
+            labels = intent_labels.map((label, index) => {
+                return { intent_label: label, abuse_label: abuse_labels[index] }
+            });
+
+        request_text(this.update_contexts, labels);
     }
 
-    update_contexts = new_contexts => this.setState({...init_state, contexts: new_contexts});
+    update_contexts = contexts => {
+        let new_state = deep_copy(init_state);
+        new_state.contexts = contexts;
+        this.setState(new_state);
+    }
 
     add_label = (target_label, label) => {
         const {state} = this;
         let { current_tuple } = state;
 
-        current_tuple[target_label] = label;
+        current_tuple[target_label] = label_map[label];
 
         if (Object.keys(current_tuple).length >= 2) {
             let { abuse_labels, intent_labels } = state;

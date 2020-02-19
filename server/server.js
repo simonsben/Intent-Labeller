@@ -21,9 +21,7 @@ app.get('/', (request, response) => {
 app.post('/signup', database_handler.new_user);
 
 // Handle logins/authentication checks
-app.post('/login', check_auth, (request, response) => {
-    response.sendStatus(200);   // OK status
-});
+app.post('/login', check_auth, database_handler.add_visit);
 
 app.get('/get_content', check_auth, database_handler.get_contexts);
 

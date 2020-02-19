@@ -11,6 +11,9 @@ const request_text = (update_callback, labels=null) => {
     request_in_progress = true;
 
     const auth_token = localStorage.getItem(token_name);
+    if (!auth_token)
+        return;
+
     const payload = { auth_token, labels };
 
     get('/get_content', { params: payload })
@@ -18,9 +21,13 @@ const request_text = (update_callback, labels=null) => {
             const { contexts } = response.data;
             console.log('content response', contexts);
 
-            update_callback(contexts)
+            update_callback(contexts);
+            request_in_progress = false;
         })
-        .catch(e => console.log(e));
+        .catch(e => {
+            console.error(e);
+            request_in_progress = false;
+        });
 };
 
 export {

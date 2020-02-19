@@ -56,21 +56,58 @@ let database_handler = {
             // Generate user token
             .then(new_user => {
                 console.log('New user', new_user);
+                request.user = new_user;
 
                 // Generate auth token for user and return it
                 return generate_token(new_user)
             })
 
             // Send auth token
-            .then(auth_token => response.send({ auth_token }))
-            .catch(error_thrower)
+            .then(auth_token => {
+                response.send({ auth_token });
+                database_handler.add_visit(request, response, false);
+            })
+            .catch(error_thrower);
+    },
+
+    add_visit: (request, response, send_response=true) => {
+        if (send_response)
+            response.sendStatus(200);   // OK status
+
+        const client_ip = request.headers['x-forwarded-for'];
+        const { user_id } = request.user;
+        const package = [user_id, client_ip];
+
+        database_handler.run(queries.insert_visit, package)
     },
 
     // Add user labels to database
-    add_labels: (labels, last_label_index) => {
+    add_labels: (labels, user_id, last_label_index) => {
         if (!labels)
             return empty_promise();
-        
+                
+        console.log('Adding labels.');
+        // Get visit id
+        return database_handler.get(queries.get_visit, [ user_id ])
+            // For each label
+            .then(({ visit_id }) => (
+                Promise.all(
+                    // Insert and wait for them all to be inserted
+                    labels.map((label, index) => {
+                        // TODO find better way to parse label... sketchy...
+                        const { intent_label, abuse_label } = JSON.parse(label);
+                        const package = [
+                            (last_label_index + index + 1),
+                            user_id,
+                            visit_id,
+                            intent_label,
+                            abuse_label
+                        ];
+    
+                        return database_handler.run(queries.insert_label, package)
+                    })
+                )
+            ));
     },
 
     // Get contexts for user
@@ -82,19 +119,24 @@ let database_handler = {
         // Get index of the last inserted label
         database_handler.get(queries.get_last_label, [ user_id ])
             // Insert old labels
-            .then(_last_label_index => {
-                last_label_index = !_last_label_index? 0 : _last_label_index;
-                return database_handler.add_labels(labels, last_label_index);
+            .then(last_label => {
+                last_label_index = !last_label? -1 : last_label.context_id;
+
+                return database_handler.add_labels(labels, user_id, last_label_index);
             })
             // Get next set of contexts to label
-            .then(() => database_handler.all(queries.get_contexts, [ last_label_index ]))
+            .then(() => {                
+                last_label_index = (!!labels)? last_label_index + labels.length : last_label_index;
+                
+                return database_handler.all(queries.get_contexts, [ last_label_index ])
+            })
             // Send contexts back to client
             .then(contexts => {
                 contexts = contexts.map(context => context.content);
                 response.send({ contexts });
             })
             .catch(e => {
-                reject('Bad request.')
+                response.sendStatus(500);
                 error_thrower(e);
             });
     }

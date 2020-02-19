@@ -5,11 +5,15 @@ import { signup } from '../actions/authentication';
 class Login extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            user_type: ''
+            user_type: '',
+            loading: props.loading,
+            fail: false
         };
 
         this.input_change = this.input_change.bind(this);
+        this.signup_error = this.signup_error.bind(this);
         this.submit = this.submit.bind(this);
     }
 
@@ -19,25 +23,30 @@ class Login extends Component {
 
     submit = () => {
         const { user_type } = this.state;
-        signup(user_type)
-            .then(() => this.props.signup_complete())
+        signup(user_type, this.signup_error)
+            .then(() => this.props.signup_complete(true))
+        
+        this.setState({...[this.state], loading: true});
+    }
+
+    signup_error = () => {
+        this.setState({ ...[this.state], fail: true });
     }
 
     render() {
         const {state} = this;
         
         const user_type_change = new_value => this.input_change('user_type', new_value);
-        const pass_change = new_value => this.input_change('password', new_value);
 
         return (
             <div className='container center'>
                 <div className='login_fields'>
                     <div><h1>If you have a referral code, please enter it here.</h1></div>
-                    <InputField value={ state.user_type } on_change={ user_type_change } name={ 'referral code' }/>
-                    {/* <InputField value={state.password} on_change={pass_change} name={'password'} input_type='password'/> */}
+                    
+                    <InputField value={ state.user_type } on_change={ user_type_change } name={ 'referral code' }/>                    
                     
                     <div className='form_submit'>
-                        <input type='button' value='Submit' onClick={this.submit}/>
+                        <input type='button' value='Submit' onClick={this.submit} disabled={ state.loading } />
                     </div>
                 </div>
             </div>

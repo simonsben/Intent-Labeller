@@ -1,9 +1,8 @@
 import { post } from 'axios';
-import { SHA3 } from 'sha3';
 
 const token_name = 'auth_token'
 
-const signup = (user_type) => {
+const signup = (user_type, signup_error) => {
     const payload = { user_type };
 
     return post('/signup', payload)
@@ -13,21 +12,28 @@ const signup = (user_type) => {
 
             console.log('Good authentication, token:', auth_token);
         })
-        .catch(e => console.error('Bad signup.'))
+        .catch(() => signup_error())
 }
 
-const is_authenticated = () => {
-    return !! localStorage.getItem(token_name);
+// Check if user is authenticated
+const is_authenticated = (remote_callback) => {
+    const auth_token = localStorage.getItem(token_name);
+
+    // If no token is present, not authenticated.
+    if (! auth_token)
+        return false;
+    
+    // If token is present, check if it is legal
+    post('/login', { auth_token })
+        .then(() => remote_callback(true))
+        .catch(e => remote_callback(false));
+
+    // Tell app there is a token and its being checked.
+    return true;
 }
-
-const authenticate = () => {
-    // const user_type = localStorage.getItem(token_name);
-
-    return null;
-};
 
 export {
     is_authenticated,
-    authenticate,
-    signup
+    signup,
+    token_name
 };

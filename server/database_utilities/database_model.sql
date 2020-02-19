@@ -2,7 +2,7 @@
 -- Author:        Ben
 -- Caption:       New Model
 -- Project:       Name of the project
--- Changed:       2020-02-18 16:37
+-- Changed:       2020-02-19 12:33
 -- Created:       2020-01-19 20:55
 PRAGMA foreign_keys = OFF;
 
@@ -40,8 +40,9 @@ CREATE TABLE "labelling_database"."label"(
   "context_id" INTEGER NOT NULL,
   "user_id" INTEGER NOT NULL,
   "visit_id" INTEGER NOT NULL,
-  "label_time" FLOAT,
-  "label" label NOT NULL,
+  "label_time" DATETIME,
+  "intent_label" label NOT NULL,
+  "abuse_label" label NOT NULL,
   CONSTRAINT "label_id_UNIQUE"
     UNIQUE("label_id"),
   CONSTRAINT "context_id"

@@ -33,10 +33,31 @@ const generate_token = user => {
         .catch(error_thrower);
 };
 
-// const verify_middleware = (request, response, next) => {
-
-// }
+const check_auth = async (request, response, next) => {
+    await load_keys();
+    
+    // Check for auth
+    const { auth_token } = (request.method === 'POST')? request.body : request.query;
+    
+    // Check if token was provided in the request
+    if (! auth_token) {
+        response.sendStatus(403);   // Forbidden response
+        return;
+    }
+    
+    // Check if the token can be decrypted
+    verify(auth_token, private_key, (e, user) => {
+        if (e) {
+            response.sendStatus(403);
+            return;
+        }
+        
+        request.user = user;
+        next();
+    });
+}
 
 module.exports = {
+    check_auth,
     generate_token
 };

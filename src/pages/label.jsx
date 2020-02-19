@@ -1,4 +1,5 @@
 import React, {Component, Fragment} from 'react';
+import { request_text } from '../actions/retrieve';
 
 const init_state = {
     index: 0,
@@ -45,6 +46,7 @@ class Label extends Component {
         const {contexts, intent_labels, abuse_labels} = this.state;
         const previous = contexts.length === 0? null : {intent_labels, abuse_labels};
         // this.props.make_request(previous, this.update_contexts);
+        request_text(this.update_contexts);
     }
 
     update_contexts = new_contexts => this.setState({...init_state, contexts: new_contexts});
@@ -71,7 +73,6 @@ class Label extends Component {
         const {state, add_label} = this;
         const index = state.intent_labels.length;
         const context = index >= state.contexts.length? null : state.contexts[index];
-        console.log(state.index, context);
 
         if (!context) this.make_request();
 
@@ -86,7 +87,7 @@ class Label extends Component {
                     </div>
                 }
                 <div className='container center'>
-                    <div className='context'>{!context? 'Loading...' : context}</div>
+                    <div className='context'>{!context? 'Loading data...' : context}</div>
                 </div>
             </Fragment>
         )

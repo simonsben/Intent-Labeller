@@ -1,5 +1,6 @@
 const express = require('express');
 const { database_handler } = require('./database_functions');
+const { check_auth } = require('./authentication');
 const path = require('path');
 const body_parser = require('body-parser')
 
@@ -19,10 +20,12 @@ app.get('/', (request, response) => {
 // Handle new users
 app.post('/signup', database_handler.new_user);
 
-// Handle logins
-app.post('/login', (req, res) => {
-    res.send({is_good: true});
+// Handle logins/authentication checks
+app.post('/login', check_auth, (request, response) => {
+    response.sendStatus(200);   // OK status
 });
+
+app.get('/get_content', check_auth, database_handler.get_contexts);
 
 
 // Listener

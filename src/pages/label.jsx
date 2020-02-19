@@ -44,7 +44,7 @@ class Label extends Component {
     make_request = () => {
         const {contexts, intent_labels, abuse_labels} = this.state;
         const previous = contexts.length === 0? null : {intent_labels, abuse_labels};
-        this.props.make_request(previous, this.update_contexts);
+        // this.props.make_request(previous, this.update_contexts);
     }
 
     update_contexts = new_contexts => this.setState({...init_state, contexts: new_contexts});

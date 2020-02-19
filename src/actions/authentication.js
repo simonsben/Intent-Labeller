@@ -1,20 +1,33 @@
 import { post } from 'axios';
 import { SHA3 } from 'sha3';
 
-const hasher = new SHA3(512);
+const token_name = 'auth_token'
 
-const authenticate = (user_id, password) => {
-    const payload = { user_id, password: hasher.digest(password) };
-    console.log('Authentication payload', payload);
+const signup = (user_type) => {
+    const payload = { user_type };
 
-    post('/login', payload)
-        .then(res => console.log('Good login.'))
-        .catch(e => console.log('Bad login request', e));
+    return post('/signup', payload)
+        .then(response => {
+            const { auth_token } = response.data;
+            localStorage.setItem(token_name, auth_token);
 
-    // TODO change to res.auth_token
-    return 'auth_token';
+            console.log('Good authentication, token:', auth_token);
+        })
+        .catch(e => console.error('Bad signup.'))
+}
+
+const is_authenticated = () => {
+    return !! localStorage.getItem(token_name);
+}
+
+const authenticate = () => {
+    // const user_type = localStorage.getItem(token_name);
+
+    return null;
 };
 
 export {
-    authenticate
+    is_authenticated,
+    authenticate,
+    signup
 };

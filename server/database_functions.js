@@ -8,6 +8,18 @@ const label_map = {
     false: 'NEGATIVE'
 };
 
+const run_callback = (resolve, reject) => (e) => {
+    if (e)
+        reject(e);
+    resolve();
+};
+
+const get_callback = (resolve, reject) => (e, data) => {
+    if (e)
+        reject(e);
+    resolve(data);
+};
+
 // Define Database handler
 let database_handler = {
     db: null,
@@ -15,25 +27,42 @@ let database_handler = {
         this.db = new Database('./labelling_database.sdb')
     },
 
+    // Convert generic database actions to promise
+    db_action: (action, query, parameters, callback_generator) => (
+        new Promise((resolve, reject) => {
+            const callback = callback_generator(resolve, reject);
+
+            if (!!parameters)
+                this.db[action](query, parameters, callback);
+            else
+                this.db[action](query, callback);
+        })
+    ),
+
+    // Promise version of specific actions
+    run: (query, parameters=null) => database_handler.db_action('run', query, parameters, run_callback),
+    get: (query, parameters=null) => database_handler.db_action('get', query, parameters, get_callback),
+
     // Add new user to database
     new_user: (request, response) => {
         const { user_type } = request.body;
 
         // Insert new user
-        this.db.run(queries.insert_user, user_type, e => {
-            error_thrower(e);
-
-            // Get user
-            this.db.get(queries.get_last_user, (e, new_user) => {
+        database_handler.run(queries.insert_user, user_type)
+            // Get user profile
+            .then(() => database_handler.get(queries.get_last_user))
+            
+            // Generate user token
+            .then(new_user => {
                 console.log('New user', new_user);
 
                 // Generate auth token for user and return it
-                generate_token(new_user)
-                    .then(auth_token => {
-                        response.send({ auth_token });
-                    })
+                return generate_token(new_user)
             })
-        });
+
+            // Send auth token
+            .then(auth_token => response.send({ auth_token }))
+            .catch(error_thrower)
     },
 
     // Add user labels to database

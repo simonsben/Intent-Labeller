@@ -11,7 +11,7 @@ const get_class_name = (selected, label) => 'marking_label ' + ((selected === la
 const generate_label = (label_type, add_label, selected) => {
 
     return (
-        <div key={label_type}>
+        <div className='marking_options' key={label_type}>
             {
                 labels.map(label => (
                     <div 

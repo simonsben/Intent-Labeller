@@ -1,7 +1,8 @@
-import React, {Component, Fragment} from 'react';
+import React, { Component } from 'react';
 import { request_text } from '../actions/retrieve';
 import { deep_copy } from '../actions/utilities';
 import { generate_label, label_map } from '../components/label';
+import '../style/label.scss';
 
 const init_state = {
     index: 0,
@@ -74,19 +75,28 @@ class Labeller extends Component {
         if (!state.done && !context) this.make_request();
 
         return (
-            <Fragment>
-                {
-                    !context? null :
-                    <div className='marking_window'>
-                        {
-                            ['intent', 'abuse'].map(variant => generate_label(variant, add_label, state.current_tuple[variant]))
-                        }
-                    </div>
-                }
-                <div className='container center'>
-                    <div className='context'>{!context? 'Loading data...' : context}</div>
+            <div className='marking_window'>
+                <div className='marking_content'>
+                    {!context? 'Loading data...' : context}
                 </div>
-            </Fragment>
+
+                {
+                    ['intent', 'abuse'].map(variant => generate_label(variant, add_label, state.current_tuple[variant]))
+                }
+            </div>
+            // <Fragment>
+            //     {
+            //         !context? null :
+            //         <div className='marking_window'>
+            //             {
+            //                 ['intent', 'abuse'].map(variant => generate_label(variant, add_label, state.current_tuple[variant]))
+            //             }
+            //         </div>
+            //     }
+            //     <div className='container center'>
+            //         <div className='context'>{!context? 'Loading data...' : context}</div>
+            //     </div>
+            // </Fragment>
         )
     }
 }

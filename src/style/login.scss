@@ -1,0 +1,51 @@
+// Container for the profile page
+.container {
+    width: 100%;
+    padding: 2rem;
+
+    -webkit-box-sizing: border-box; 
+    -moz-box-sizing: border-box;    
+    box-sizing: border-box;
+
+    // Page title
+    > h2 {
+        text-align: center;
+    }
+}
+
+// Container for the input fields
+.login_fields {
+    display: flex;
+    flex-direction: column;
+}
+
+// Container for an input item
+.input_item {
+    display: flex;
+    justify-content: center;
+
+    // Name/prompt for the field
+    > .input_title {
+        margin: .5rem 1rem;
+    }
+
+    // Input field
+    > input {
+        margin: .25rem .1rem;
+        padding: .1rem .5rem;
+        font-size: 1rem;
+    }
+}
+
+// Container for the submit button
+.submit {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    
+    // Submit button
+    > input {
+        max-width: 6rem;
+        height: 1.75rem;
+    }
+}

@@ -1,25 +1,24 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { is_authenticated } from './actions/authentication';
 import Login from './pages/login';
 import Labeller from './pages/labeller';
-import './App.scss';
 
 
 class App extends Component {
     constructor(props) {
         super(props);
 
-        const has_local_token = is_authenticated(this.signup_complete);
+        const has_local_token = is_authenticated(this.sign_up_complete);
 
         this.state = {
             is_authenticated: has_local_token,
             loading: has_local_token
         }
 
-        this.signup_complete = this.signup_complete.bind(this);
+        this.sign_up_complete = this.sign_up_complete.bind(this);
     }
 
-    signup_complete = ( is_authenticated ) => {
+    sign_up_complete = ( is_authenticated ) => {
         console.log('Authenticate', is_authenticated);
         this.setState({ ...[this.state], is_authenticated, loading: false });
     }
@@ -27,14 +26,14 @@ class App extends Component {
     render() {
         const { is_authenticated, loading } = this.state;
         return (
-            <div className='base'>
+            <Fragment>
                 {
                     !is_authenticated?
-                    <Login loading={ loading } signup_complete={ this.signup_complete } />
+                    <Login loading={ loading } sign_up_complete={ this.sign_up_complete } />
                     :
                     <Labeller />
                 }
-            </div>
+            </Fragment>
         );
     }
 }

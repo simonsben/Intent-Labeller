@@ -3,7 +3,7 @@ import '../App.scss';
 
 const InputField = ({name, value, on_change, input_type='text'}) => {
     return (
-        <div className='container'>
+        <div className='input_item'>
             <div className='input_title'>{name}</div>
             <input 
                 type={input_type}

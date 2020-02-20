@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import InputField from '../components/input_field';
-import { signup } from '../actions/authentication';
+import { signup as sign_up } from '../actions/authentication';
+import '../style/login.scss';
 
 class Login extends Component {
     constructor(props) {
@@ -13,7 +14,7 @@ class Login extends Component {
         };
 
         this.input_change = this.input_change.bind(this);
-        this.signup_error = this.signup_error.bind(this);
+        this.sign_up_error = this.sign_up_error.bind(this);
         this.submit = this.submit.bind(this);
     }
 
@@ -23,13 +24,13 @@ class Login extends Component {
 
     submit = () => {
         const { user_type } = this.state;
-        signup(user_type, this.signup_error)
-            .then(() => this.props.signup_complete(true))
+        sign_up(user_type, this.sign_up_error)
+            .then(() => this.props.sign_up_complete(true))
         
         this.setState({...[this.state], loading: true});
     }
 
-    signup_error = () => {
+    sign_up_error = () => {
         this.setState({ ...[this.state], fail: true });
     }
 
@@ -39,13 +40,13 @@ class Login extends Component {
         const user_type_change = new_value => this.input_change('user_type', new_value);
 
         return (
-            <div className='container center'>
+            <div className='container'>
+                <h2>Make a new profile</h2>
+
                 <div className='login_fields'>
-                    <div><h1>If you have a referral code, please enter it here.</h1></div>
-                    
                     <InputField value={ state.user_type } on_change={ user_type_change } name={ 'referral code' }/>                    
                     
-                    <div className='form_submit'>
+                    <div className='submit'>
                         <input type='button' value='Submit' onClick={this.submit} disabled={ state.loading } />
                     </div>
                 </div>

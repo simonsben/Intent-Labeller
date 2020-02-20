@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { is_authenticated } from './actions/authentication';
 import Login from './pages/login';
-import Label from './pages/label';
+import Labeller from './pages/labeller';
 import './App.scss';
 
 
@@ -32,7 +32,7 @@ class App extends Component {
                     !is_authenticated?
                     <Login loading={ loading } signup_complete={ this.signup_complete } />
                     :
-                    <Label />
+                    <Labeller />
                 }
             </div>
         );

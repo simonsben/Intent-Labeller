@@ -3,11 +3,6 @@ const { queries } = require('./queries');
 const { error_thrower, empty_promise } = require('./utilities');
 const { generate_token } = require('./authentication');
 
-const label_map = {
-    true: 'POSITIVE',
-    false: 'NEGATIVE'
-};
-
 const run_callback = (resolve, reject) => (e) => {
     if (e)
         reject(e);
@@ -146,7 +141,6 @@ let database_handler = {
             });
     }
 };
-
 
 
 

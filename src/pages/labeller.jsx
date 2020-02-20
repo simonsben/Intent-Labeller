@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import { request_text } from '../actions/retrieve';
 import { deep_copy } from '../actions/utilities';
+import { generate_label, label_map } from '../components/label';
 
 const init_state = {
     index: 0,
@@ -10,31 +11,7 @@ const init_state = {
     current_tuple: {}
 };
 
-const label_map = {
-    'doesn\'t contain': 'POSITIVE',
-    'contains': 'NEGATIVE'
-};
-const labels = Object.keys(label_map);
-
-const generate_labeller = (target_label, add_label, selected=null) => {   
-
-    return (
-        <div key={target_label}>
-            {
-                labels.map(label => (
-                    <div 
-                        className={'marking_label ' + ((selected === label)? 'selected' : '')} 
-                        onClick={() => add_label(target_label, label)} 
-                        key={label + target_label}>
-                            <div>{label + ' ' + target_label}</div>
-                    </div>
-                ))
-            }
-        </div>
-    );
-};
-
-class Label extends Component {
+class Labeller extends Component {
     constructor(props) {
         super(props);
 
@@ -77,7 +54,10 @@ class Label extends Component {
         this.setState({...state, current_tuple});
     }
 
-    is_done = () => !!this.state.contexts;
+    is_done = () => {
+        const { contexts } = this.state;
+        return (contexts === null) || typeof contexts === 'undefined';
+    };
     
 
     render() {
@@ -99,7 +79,7 @@ class Label extends Component {
                     !context? null :
                     <div className='marking_window'>
                         {
-                            ['intent', 'abuse'].map(variant => generate_labeller(variant, add_label, state.current_tuple[variant]))
+                            ['intent', 'abuse'].map(variant => generate_label(variant, add_label, state.current_tuple[variant]))
                         }
                     </div>
                 }
@@ -111,4 +91,4 @@ class Label extends Component {
     }
 }
 
-export default Label;
+export default Labeller;

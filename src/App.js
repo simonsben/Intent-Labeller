@@ -26,14 +26,14 @@ class App extends Component {
     render() {
         const { is_authenticated, loading } = this.state;
         return (
-            <Fragment>
+            <div className='base_container'>
                 {
                     !is_authenticated?
                     <Login loading={ loading } sign_up_complete={ this.sign_up_complete } />
                     :
                     <Labeller />
                 }
-            </Fragment>
+            </div>
         );
     }
 }

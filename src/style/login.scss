@@ -34,6 +34,11 @@
         padding: .1rem .5rem;
         font-size: 1rem;
     }
+
+    &.vertical {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
 // Container for the submit button
@@ -47,4 +52,9 @@
         max-width: 6rem;
         height: 1.75rem;
     }
+}
+
+.long_text {
+    max-width: 50rem;
+    margin-bottom: 3rem;
 }

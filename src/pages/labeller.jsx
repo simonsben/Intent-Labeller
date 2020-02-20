@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { request_text } from '../actions/retrieve';
 import { deep_copy } from '../actions/utilities';
+import { request_text } from '../actions/retrieve';
+import { ThankYou } from '../components/thank_you';
 import { generate_label, label_map } from '../components/label';
 import '../style/label.scss';
 
@@ -66,9 +67,7 @@ class Labeller extends Component {
         const index = state.intent_labels.length;
 
         if (is_done())
-            return (
-                <div>Wow, looks like you're done!</div>
-            );
+            return <ThankYou />
 
         const context = (is_done() || index >= state.contexts.length)? null : state.contexts[index];
 
@@ -84,19 +83,6 @@ class Labeller extends Component {
                     ['intent', 'abuse'].map(variant => generate_label(variant, add_label, state.current_tuple[variant]))
                 }
             </div>
-            // <Fragment>
-            //     {
-            //         !context? null :
-            //         <div className='marking_window'>
-            //             {
-            //                 ['intent', 'abuse'].map(variant => generate_label(variant, add_label, state.current_tuple[variant]))
-            //             }
-            //         </div>
-            //     }
-            //     <div className='container center'>
-            //         <div className='context'>{!context? 'Loading data...' : context}</div>
-            //     </div>
-            // </Fragment>
         )
     }
 }

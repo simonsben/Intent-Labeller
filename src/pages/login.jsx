@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import InputField from '../components/input_field';
+import { Warning, Instructions, FinalNote } from '../components/information';
 import { signup as sign_up } from '../actions/authentication';
 import '../style/login.scss';
 
@@ -44,6 +45,9 @@ class Login extends Component {
                 <h2>Make a new profile</h2>
 
                 <div className='login_fields'>
+                    <Warning />
+                    <Instructions />
+                    <FinalNote />
                     <InputField value={ state.user_type } on_change={ user_type_change } name={ 'referral code' }/>                    
                     
                     <div className='submit'>

@@ -1,7 +1,7 @@
-import React, { Component, Fragment } from 'react';
-import { is_authenticated } from './actions/authentication';
+import React, { Component } from 'react';
 import Login from './pages/login';
 import Labeller from './pages/labeller';
+import { is_authenticated } from './actions/authentication';
 
 
 class App extends Component {

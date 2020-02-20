@@ -9,8 +9,6 @@ const signup = (user_type, signup_error) => {
         .then(response => {
             const { auth_token } = response.data;
             localStorage.setItem(token_name, auth_token);
-
-            console.log('Good authentication, token:', auth_token);
         })
         .catch(() => signup_error())
 }

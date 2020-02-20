@@ -44,6 +44,7 @@ class Labeller extends Component {
         let { current_tuple } = state;
 
         current_tuple[target_label] = label_map[label];
+        let callback = () => {};
 
         if (Object.keys(current_tuple).length >= 2) {
             let { abuse_labels, intent_labels } = state;
@@ -51,9 +52,10 @@ class Labeller extends Component {
             intent_labels.push(current_tuple.intent);
 
             current_tuple = {};
-            this.setState({ ...state, current_tuple, abuse_labels, intent_labels });
+            this.setState({ ...[this.state], current_tuple, abuse_labels, intent_labels })
         }
-        this.setState({...state, current_tuple});
+        else
+            this.setState({...state, current_tuple}, callback);
     }
 
     is_done = () => {

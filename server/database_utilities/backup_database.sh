@@ -11,4 +11,5 @@ if [ ! -f "$DATABASE_PATH" ]; then
     exit 0;
 fi
 
-mv "$DATABASE_PATH" "$BACKUP_PATH"
+# Backup with copy so the server can remain running
+cp "$DATABASE_PATH" "$BACKUP_PATH"

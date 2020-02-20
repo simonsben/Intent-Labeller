@@ -16,7 +16,8 @@
     width: 80%;
     margin-left: 10%;
     margin-bottom: 1rem;
-    min-height: 2rem;
+    min-height: 4.5rem;
+    font-size: 1.25rem;
     
     text-align: center;
     @extend .not_selectable;
@@ -32,22 +33,26 @@
 // Label option
 .marking_label {
     width: 50%;
+    margin: 2px;
     padding-top: 1rem;
     flex-grow: 1;
-    border: solid 2px rgba(255, 255, 255, 0);
+    border: solid 2px rgba(0, 0, 0, .25);
     border-radius: 1px;
 
     text-align: center;
     @extend .not_selectable;
 
     // Change color on hover
-    &:hover {
-        background-color: rgba(52, 125, 235, .5);
-        border: solid 2px black;
+    @media (hover: hover) {
+        &:hover {
+            background-color: rgba(52, 125, 235, .5);
+            border: solid 2px black;
+        }
     }
     
     // Change color when selected
     &.selected {
+        border: solid 2px rgba(0, 0, 0, .5);
         background-color: rgba(255, 87, 51, .5);
     }
 }

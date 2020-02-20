@@ -34,4 +34,4 @@ app.get('/get_content', check_auth, database_handler.get_contexts);
 app.use(express.static(path.join(__dirname, '../build')));
 
 // Listener
-app.listen(process.env.PORT || 8080);
+app.listen(process.env.PORT || 8080, () => console.log('Server up.'));

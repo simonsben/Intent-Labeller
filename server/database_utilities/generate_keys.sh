@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Move back up
+cd ../
+
 KEY_NAME="auth/auth_key"
 
 # Make auth directory for keys

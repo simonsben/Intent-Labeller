@@ -10,7 +10,8 @@ const init_state = {
     contexts: [],
     intent_labels: [],
     abuse_labels: [],
-    current_tuple: {}
+    current_tuple: {},
+    hovering: false
 };
 
 class Labeller extends Component {
@@ -39,11 +40,15 @@ class Labeller extends Component {
         this.setState(new_state);
     }
 
-    add_label = (target_label, label) => {
+    add_label = (target_label, label, skip=false) => {
         const {state} = this;
         let { current_tuple } = state;
 
-        current_tuple[target_label] = label_map[label];
+        if (skip)
+            current_tuple = { intent: 'SKIP', abuse: 'SKIP' };
+        else 
+            current_tuple[target_label] = label_map[label];
+        
         let callback = () => {};
 
         if (Object.keys(current_tuple).length >= 2) {
@@ -62,6 +67,9 @@ class Labeller extends Component {
         const { contexts } = this.state;
         return (contexts === null) || typeof contexts === 'undefined';
     };
+
+    over = () => this.setState({ ...[this.state], hovering: true });
+    off = () => this.setState({ ...[this.state], hovering: false });
     
 
     render() {
@@ -75,10 +83,20 @@ class Labeller extends Component {
 
         if (!state.done && !context) this.make_request();
 
+        const content_style = 'marking_content' + (state.hovering? ' skip' : '');
+
         return (
             <div className='marking_window'>
-                <div className='marking_content'>
-                    {!context? 'Loading data...' : context}
+                <div 
+                    className={content_style} 
+                    onMouseEnter={this.over} 
+                    onMouseLeave={this.off} 
+                    onClick={() => add_label(null, null, true)}
+                    >
+                    {
+                        !context? 'Loading data...' :
+                        ( state.hovering? 'skip' : context )
+                    }
                 </div>
 
                 {

@@ -9,6 +9,18 @@
     width: 100%;
     height: 100vh;
     padding: 1rem 1rem;
+
+    &.demo {
+        height: 12em;
+        width: 50%;
+
+        @extend .thick_border;
+    }
+}
+
+.thick_border {
+    border: solid 2px rgba(0, 0, 0, .25);
+    border-radius: 1px;
 }
 
 // Content being labelled
@@ -19,9 +31,25 @@
     min-height: 4.5rem;
     font-size: 1.25rem;
     
+    @extend .thick_border;
+
     text-align: center;
     @extend .not_selectable;
+
+    &.skip {
+        @extend .content_skip;
+    }
+
+    &.demo, &:hover {
+        @extend .content_skip;
+    }
 }
+
+.content_skip {
+    background-color: rgba(189, 26, 40, .6);
+}
+
+
 
 // Container for label options
 .marking_options {
@@ -53,6 +81,6 @@
     // Change color when selected
     &.selected {
         border: solid 2px rgba(0, 0, 0, .5);
-        background-color: rgba(255, 87, 51, .5);
+        background-color: rgba(233, 116, 81, .8);
     }
 }

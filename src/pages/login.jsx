@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import InputField from '../components/input_field';
-import { Warning, Instructions, FinalNote } from '../components/information';
-import { signup as sign_up } from '../actions/authentication';
+import { Warning, Instructions, FinalNote, Purpose } from '../components/information';
+import { sign_up } from '../actions/authentication';
 import '../style/login.scss';
 
 class Login extends Component {
@@ -42,16 +42,17 @@ class Login extends Component {
 
         return (
             <div className='container'>
-                <h2>Make a new profile</h2>
+                <h2>Abusive intent detection in social media posts</h2>
 
                 <div className='login_fields'>
+                    <Purpose />
                     <Warning />
                     <Instructions />
                     <FinalNote />
                     <InputField value={ state.user_type } on_change={ user_type_change } name={ 'referral code' }/>                    
                     
                     <div className='submit'>
-                        <input type='button' value='Submit' onClick={this.submit} disabled={ state.loading } />
+                        <input type='button' value='Acknowledge and begin.' onClick={this.submit} disabled={ state.loading } />
                     </div>
                 </div>
             </div>

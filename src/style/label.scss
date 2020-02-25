@@ -10,6 +10,7 @@
     height: 100vh;
     padding: 1rem 1rem;
 
+    // Reduced size for preview/instruction version
     &.demo {
         height: 12em;
         width: 50%;
@@ -36,20 +37,11 @@
     text-align: center;
     @extend .not_selectable;
 
-    &.skip {
-        @extend .content_skip;
-    }
-
-    &.demo, &:hover {
-        @extend .content_skip;
+    // Skip document style
+    &.skip, &.demo, &:hover {
+        background-color: rgba(189, 26, 40, .6);
     }
 }
-
-.content_skip {
-    background-color: rgba(189, 26, 40, .6);
-}
-
-
 
 // Container for label options
 .marking_options {

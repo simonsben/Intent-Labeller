@@ -2,7 +2,7 @@ import { post } from 'axios';
 
 const token_name = 'auth_token'
 
-const signup = (user_type, signup_error) => {
+const sign_up = (user_type, signup_error) => {
     const payload = { user_type };
 
     return post('/signup', payload)
@@ -32,6 +32,6 @@ const is_authenticated = (remote_callback) => {
 
 export {
     is_authenticated,
-    signup,
+    sign_up,
     token_name
 };

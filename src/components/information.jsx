@@ -88,11 +88,11 @@ const Instructions = props => {
     const custom = (
         <div className='marking_window demo'>
             <div className='marking_content'> document </div>
-            <div className='marking_options'>
-                {
-                    generate_label('X', ()=>{}, null)
-                }
-            </div>
+            { 
+                ['intent', 'abuse'].map(option => (
+                    <div className='marking_options'> { generate_label(option, ()=>{}, null) } </div>
+                ))
+            }
         </div>
     );
 
@@ -107,11 +107,12 @@ const FinalNote = props => {
             Do <b>NOT</b> enter any personally identifiable information (ex. name).
         </Fragment>
     )} />
-}
+};
 
 export {
     Purpose,
     Warning,
     Instructions,
-    FinalNote
+    FinalNote,
+    TextItem
 };

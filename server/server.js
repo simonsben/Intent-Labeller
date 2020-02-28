@@ -3,8 +3,11 @@ const body_parser = require('body-parser');
 const express = require('express');
 const path = require('path');
 
-const { database_handler } = require('./database_functions');
-const { check_auth } = require('./authentication');
+const { database_handler } = require('./database_handler');
+const { check_auth, reviver } = require('./authentication');
+
+// Set to production environment
+process.env.NODE_ENV = 'production';
 
 // Initialize database and web-server
 database_handler.init();
@@ -12,7 +15,10 @@ const app = express();
 
 // Add universal middleware
 app.use( compression() );
-app.use( body_parser.json() );
+app.use(body_parser.json({
+    limit: '5kb',
+    reviver: reviver
+}));
 
 // Page requests
 app.get('/', (request, response) => {

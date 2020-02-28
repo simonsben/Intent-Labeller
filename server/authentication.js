@@ -55,9 +55,32 @@ const check_auth = async (request, response, next) => {
         request.user = user;
         next();
     });
-}
+};
+
+// Expected JSON request keys
+const approved_keys = new Set([
+    'auth_token',
+    'user_type',
+    'labels',
+    'intent_label',
+    'abuse_label'
+]);
+
+// Checks for expected keys, otherwise removes value
+const reviver = (key, value) => {
+    // Key
+    if (approved_keys.has(key))
+        return value;
+    // Final parsed object
+    else if ((key === '') && ((typeof value) === 'object'))
+        return value;
+
+    console.log('no key', key, 'value', value);
+    return null;
+};
 
 module.exports = {
     check_auth,
-    generate_token
+    generate_token,
+    reviver
 };

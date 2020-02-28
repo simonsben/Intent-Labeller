@@ -1,7 +1,7 @@
 const { Database } = require('sqlite3').verbose();
 const { queries } = require('./queries');
 const { error_thrower, empty_promise } = require('./utilities');
-const { generate_token } = require('./authentication');
+const { generate_token, reviver } = require('./authentication');
 
 const run_callback = (resolve, reject) => (e) => {
     if (e)
@@ -74,6 +74,7 @@ let database_handler = {
         const package = [user_id, client_ip];
 
         database_handler.run(queries.insert_visit, package)
+        .catch(error_thrower)
     },
 
     // Add user labels to database
@@ -88,8 +89,7 @@ let database_handler = {
                 Promise.all(
                     // Insert and wait for them all to be inserted
                     labels.map((label, index) => {
-                        // TODO find better way to parse label... sketchy...
-                        const { intent_label, abuse_label } = JSON.parse(label);
+                        const { intent_label, abuse_label } = JSON.parse(label, reviver);
                         const package = [
                             (last_label_index + index + 1),
                             user_id,
@@ -101,7 +101,8 @@ let database_handler = {
                         return database_handler.run(queries.insert_label, package)
                     })
                 )
-            ));
+            ))
+            .catch(error_thrower)
     },
 
     // Get contexts for user
@@ -135,10 +136,7 @@ let database_handler = {
                 contexts = contexts.map(context => context.content);
                 response.send({ contexts });
             })
-            .catch(e => {
-                response.sendStatus(500);
-                error_thrower(e);
-            });
+            .catch(error_thrower)
     }
 };
 

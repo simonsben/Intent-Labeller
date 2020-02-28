@@ -40,6 +40,7 @@ class Labeller extends Component {
         this.setState(new_state);
     }
 
+    // TODO associate labels with context ID
     add_label = (target_label, label, skip=false) => {
         const {state} = this;
         let { current_tuple } = state;

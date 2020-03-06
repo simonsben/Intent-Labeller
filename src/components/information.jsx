@@ -8,7 +8,7 @@ const TextItem = props => (
         <div className='long_text'>{ props.body }</div>
         { props.custom }
     </div>
-)
+);
 
 const Purpose = props => {
     const header = 'Overview of research:';
@@ -28,7 +28,7 @@ const Purpose = props => {
 };
 
 const Warning = props => {
-    const header = 'Disclaimer:';
+    const header = 'Please be aware:';
     const body = (
         <Fragment>
             The goal of this research is to be able to identify intent, specifically abusive intent in text. 
@@ -41,12 +41,17 @@ const Warning = props => {
             The token will then be stored in your browser and used to prevent you from being asked to label the same document multiple times.
             As explained above, the collected data (labels) will be used to quantify the accuracy of the approach developed in the research.
             The intention is to then publish these results in an academic journal and as part of a master's thesis.
-            The anonymous data will be kept after the conclusion of this study for use in future research. <br/><br/>
+            The anonymous data will be kept indefinitely after the conclusion of this study for use in future research by members of the research community. 
+            Should you stop before labelling all given documents some of the labels may be saved and used.
+            After starting the labelling, you will be unable to request your labels (i.e. data) be deleted since the submissions are anonymous.
+            Please note that the Queen's General Research Ethics Board (GREB) may request access to study data to ensure that the researcher(s) have or are meeting their ethical obligations in conducting this research.
+            Please understand that your participation in the study is entirely voluntary and you have not waived any legal rights by consenting to participate. <br/><br/>
 
             If you have any ethics concerns please contact the General Research Ethics Board (GREB) at 1-844-535-2988 (Toll free in North America) or email <a href='mailto:chair.GREB@queensu.ca'>chair.GREB@queensu.ca</a>.
             Call 1-613-533-2988 if outside North America. 
             If non-English speaking participants wish to contact the Chair for ethics concerns, translation assistance may be necessary, as the REB Chair communicates in English only. <br/>
 
+            The research is being conducted by Professor David Skillicorn and Ben Simons from the <a href='https://www.cs.queensu.ca/'>School of Computing</a> at <a href='https://www.queensu.ca/'>Queen's University</a>.
             If you have any questions about the research, please contact Professor Skillicorn at <a href='mailto:skill@cs.queensu.ca'>skill@cs.queensu.ca</a> from the Department of Computing at Queen's University.
             By clicking submit you are consenting to the possibility of reading offensive text and acknowledge that you can stop at any time. 
         </Fragment>
@@ -58,7 +63,7 @@ const Instructions = props => {
     const header = 'Instructions:';
     const body = (
         <Fragment>
-            Thank you for your interest in helping to label data. 
+            Thank you for your interest in helping to label data, the process should take you no longer than 20 minutes and are free to stop at any time.
             As said above, the purpose of this is to identify text that contains intent and/or abuse. 
             In the study, abusive language is defined as an insult or hate speech. 
             Intent can be thought of as text where the author expresses an intention or desire to do something <b>in the future</b>. 
@@ -82,7 +87,7 @@ const Instructions = props => {
             When labelling a document you will be asked to label whether a document contains intent and whether it contains abuse (separately).
             Below is an example of the labelling interface, you can press contains or doesn't contain to label the document. 
             If you would like to skip the document, you can click on the document to skip to the next one. 
-            With that said, thank you again for your participation and please do your best to follow these guidelines when labelling.
+            You are now invited to participate in the study and asked to please do your best to follow the above guidelines when labelling.
         </Fragment>
     );
     const custom = (

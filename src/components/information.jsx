@@ -41,7 +41,7 @@ const Warning = props => {
             The token will then be stored in your browser and used to prevent you from being asked to label the same document multiple times.
             As explained above, the collected data (labels) will be used to quantify the accuracy of the approach developed in the research.
             The intention is to then publish these results in an academic journal and as part of a master's thesis.
-            The anonymous data will be kept indefinitely after the conclusion of this study for use in future research by members of the research community. 
+            The anonymous data will be kept indefinitely and for a minimum of five years after the conclusion of this study for use in future research by members of the research community. 
             Should you stop before labelling all given documents some of the labels may be saved and used.
             After starting the labelling, you will be unable to request your labels (i.e. data) be deleted since the submissions are anonymous.
             Please note that the Queen's General Research Ethics Board (GREB) may request access to study data to ensure that the researcher(s) have or are meeting their ethical obligations in conducting this research.

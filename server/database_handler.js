@@ -123,10 +123,11 @@ let database_handler = {
             .then(() => {                
                 last_label_index = (!!labels)? last_label_index + labels.length : last_label_index;
                 
-                return database_handler.all(queries.get_contexts, [ last_label_index ])
+                return database_handler.all(queries.get_contexts, [ user_id ])
             })
             // Send contexts back to client
             .then(contexts => {
+                console.log(contexts);
                 // If no more data, send complete.
                 if (contexts.length == 0) {
                     response.send({ complete: true });

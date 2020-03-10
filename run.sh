@@ -4,4 +4,4 @@
 cd server/
 
 echo "Starting server."
-node server.js
+pm2 start "server.js"

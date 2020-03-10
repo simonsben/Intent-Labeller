@@ -29,7 +29,7 @@ const load_keys = async () => {
 
 const generate_token = user => {
     return load_keys()
-        .then(() => sign(user, private_key))
+        .then(() => sign(user, private_key, { expiresIn: '365d' }))
         .catch(error_thrower);
 };
 

@@ -1,8 +1,9 @@
 // TODO move datetime to client
+const { readFileSync } = require('fs');
 
 const queries = {
     'insert_context': 'INSERT INTO context VALUES(?, ?, ?, ?);',
-    'get_contexts': 'SELECT content FROM context WHERE context_id > ? ORDER BY context_id LIMIT 5;',
+    'get_contexts': readFileSync('database_utilities/get_contexts.sql', 'utf8'),
     
     'insert_user': 'INSERT INTO user VALUES(NULL, ?);',
     'get_last_user': 'SELECT * FROM user ORDER BY user_id DESC LIMIT 1;',

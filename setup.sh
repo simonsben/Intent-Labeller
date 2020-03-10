@@ -5,6 +5,7 @@ echo "Running setup script"
 # Install dependencies and build site
 echo "Installing dependencies"
 npm install "package.json"
+npm install -g pm2
 
 echo "Building site."
 npm run build

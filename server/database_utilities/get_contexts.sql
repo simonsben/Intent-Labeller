@@ -16,7 +16,7 @@ WHERE context_id NOT IN (
 ) AND context_id NOT IN (
     SELECT context_id
     FROM label
-    WHERE user_id = 1
+    WHERE user_id = ?
     GROUP BY context_id
 )
 ORDER BY context_id

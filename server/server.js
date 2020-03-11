@@ -8,6 +8,7 @@ const { check_auth, reviver } = require('./authentication');
 
 // Set to production environment
 process.env.NODE_ENV = 'production';
+const root_path = path.join(__dirname, '../build');
 
 // Initialize database and web-server
 database_handler.init();
@@ -23,7 +24,7 @@ app.use(body_parser.json({
 // Page requests
 app.get('/', (request, response) => {
     response.sendFile(
-        path.join(__dirname, '../build', 'index.html')
+        path.join(root_path, 'index.html')
     );
 });
 
@@ -37,7 +38,13 @@ app.post('/login', check_auth, database_handler.add_visit);
 app.get('/get_content', check_auth, database_handler.get_contexts);
 
 // Add ability to resolve other paths
-app.use(express.static(path.join(__dirname, '../build')));
+app.use(express.static(root_path));
 
-// Listener
-app.listen(process.env.PORT || 8080, () => console.log('Server up.'));
+// Start listener if testing
+if (require.main === module)
+    app.listen(process.env.PORT || 8080, () => console.log('Server up.'));
+
+module.exports = {
+    root_path,
+    app
+};

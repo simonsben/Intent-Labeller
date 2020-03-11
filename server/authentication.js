@@ -62,8 +62,9 @@ const approved_keys = new Set([
     'auth_token',
     'user_type',
     'labels',
-    'intent_label',
-    'abuse_label'
+    'intent',
+    'abuse',
+    'context_id'
 ]);
 
 // Checks for expected keys, otherwise removes value

@@ -1,7 +1,18 @@
 #!/bin/bash
 
-# Moving into working directory
-cd server/
+PID=$(pm2 pid server);
 
-echo "Starting server."
-pm2 start "server.js"
+# Check if service is already running
+if [ -z "$PID" ]; then
+    echo "Starting service.";
+    
+    # Moving into working directory and starting
+    cd "server/";
+    pm2 start "server.js";
+    
+    exit 0;
+fi
+
+# Restart service
+echo "Restarting service.";
+pm2 restart server;

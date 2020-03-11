@@ -8,10 +8,13 @@ import '../style/label.scss';
 const init_state = {
     index: 0,
     contexts: [],
-    intent_labels: [],
-    abuse_labels: [],
+    labels: [],
     current_tuple: {},
     hovering: false
+};
+const skip_tuple = {
+    abuse: 'SKIP',
+    intent: 'SKIP'
 };
 
 class Labeller extends Component {
@@ -24,13 +27,7 @@ class Labeller extends Component {
     }
 
     make_request = () => {
-        const {contexts, intent_labels, abuse_labels} = this.state;
-        let labels = null;
-        if (contexts.length > 0)
-            labels = intent_labels.map((label, index) => {
-                return { intent_label: label, abuse_label: abuse_labels[index] }
-            });
-
+        const { labels } = this.state;
         request_text(this.update_contexts, labels);
     }
 
@@ -42,26 +39,23 @@ class Labeller extends Component {
 
     // TODO associate labels with context ID
     add_label = (target_label, label, skip=false) => {
-        const {state} = this;
-        let { current_tuple } = state;
+        const { state } = this;
+        let { current_tuple, labels } = state;
+        const { context_id } = state.contexts[labels.length];
 
         if (skip)
-            current_tuple = { intent: 'SKIP', abuse: 'SKIP' };
+            current_tuple = { ...skip_tuple };
         else 
             current_tuple[target_label] = label_map[label];
-        
-        let callback = () => {};
+        current_tuple['context_id'] = context_id;
 
-        if (Object.keys(current_tuple).length >= 2) {
-            let { abuse_labels, intent_labels } = state;
-            abuse_labels.push(current_tuple.abuse);
-            intent_labels.push(current_tuple.intent);
+        if (Object.keys(current_tuple).length >= (Object.keys(skip_tuple).length + 1)) {
+            let { labels } = state;
+            labels.push(current_tuple);
 
             current_tuple = {};
-            this.setState({ ...[this.state], current_tuple, abuse_labels, intent_labels })
         }
-        else
-            this.setState({...state, current_tuple}, callback);
+        this.setState({ ...state, current_tuple, labels });
     }
 
     is_done = () => {
@@ -75,14 +69,14 @@ class Labeller extends Component {
 
     render() {
         const { state, add_label, is_done } = this;
-        const index = state.intent_labels.length;
+        const index = state.labels.length;
 
         if (is_done())
-            return <ThankYou />
+            return <ThankYou />;
 
-        const context = (is_done() || index >= state.contexts.length)? null : state.contexts[index];
+        const content = (index >= state.contexts.length)? null : state.contexts[index].content;
 
-        if (!state.done && !context) this.make_request();
+        if (!state.done && !content) this.make_request();
 
         const content_style = 'marking_content' + (state.hovering? ' skip' : '');
 
@@ -95,8 +89,8 @@ class Labeller extends Component {
                     onClick={() => add_label(null, null, true)}
                     >
                     {
-                        !context? 'Loading data...' :
-                        ( state.hovering? 'skip' : context )
+                        !content? 'Loading data...' :
+                        ( state.hovering? 'skip' : content )
                     }
                 </div>
 

@@ -1,8 +1,8 @@
 import React from 'react';
 
 const label_map = {
-    'doesn\'t contain': 'POSITIVE',
-    'contains': 'NEGATIVE'
+    'doesn\'t contain': 'NEGATIVE',
+    'contains': 'POSITIVE'
 };
 const labels = Object.keys(label_map);
 

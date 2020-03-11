@@ -3,7 +3,7 @@ import { Purpose, Warning, TextItem } from './information';
 
 const final_note = (
     <Fragment>
-        Thank you for participating in the labelling of the data!
+        Looks like thats all the labels for today.
         To help ensure careful labelling of the data you have reached the maximum number of labels for today.
         If you would like to you can return to the site on another day and continue labelling more data.
         However, if you loaded the website in a <i>private</i> window and/or cleared your browsers local storage (similar to cookies) you are asked to refrain from returning.
@@ -15,7 +15,7 @@ const final_note = (
 const ThankYou = props => (
     <div className='container'>
         <div className='login_fields'>
-            <TextItem header='Thank you for participating!' body={ final_note } />
+            <TextItem header="Thank you for participating, that's it!" body={ final_note } />
             <Purpose />
             <Warning />
         </div>

@@ -78,7 +78,7 @@ let database_handler = {
     },
 
     // Add user labels to database
-    add_labels: (labels, user_id, last_label_index) => {
+    add_labels: (labels, user_id) => {
         if (!labels)
             return empty_promise();
                 
@@ -88,15 +88,16 @@ let database_handler = {
             .then(({ visit_id }) => (
                 Promise.all(
                     // Insert and wait for them all to be inserted
-                    labels.map((label, index) => {
-                        const { intent_label, abuse_label } = JSON.parse(label, reviver);
+                    labels.map(label => {
+                        const { intent, abuse, context_id } = JSON.parse(label, reviver);
                         const package = [
-                            (last_label_index + index + 1),
+                            context_id,
                             user_id,
                             visit_id,
-                            intent_label,
-                            abuse_label
+                            intent,
+                            abuse
                         ];
+                        console.log('label package', package)
     
                         return database_handler.run(queries.insert_label, package)
                     })
@@ -109,32 +110,19 @@ let database_handler = {
     get_contexts: (request, response) => {
         const { user_id } = request.user;
         const { labels } = request.query;
-        let last_label_index;
 
-        // Get index of the last inserted label
-        database_handler.get(queries.get_last_label, [ user_id ])
-            // Insert old labels
-            .then(last_label => {
-                last_label_index = !last_label? -1 : last_label.context_id;
-
-                return database_handler.add_labels(labels, user_id, last_label_index);
-            })
+        // Insert labels if possible
+        database_handler.add_labels(labels, user_id)
             // Get next set of contexts to label
-            .then(() => {                
-                last_label_index = (!!labels)? last_label_index + labels.length : last_label_index;
-                
-                return database_handler.all(queries.get_contexts, [ user_id ])
-            })
+            .then(() => database_handler.all(queries.get_contexts, [ user_id ]))
             // Send contexts back to client
             .then(contexts => {
-                console.log(contexts);
                 // If no more data, send complete.
                 if (contexts.length == 0) {
                     response.send({ complete: true });
                     return;
                 }
 
-                contexts = contexts.map(context => context.content);
                 response.send({ contexts });
             })
             .catch(error_thrower)

@@ -95,7 +95,7 @@ const Instructions = props => {
             <div className='marking_content'> document </div>
             { 
                 ['intent', 'abuse'].map(option => (
-                    <div className='marking_options'> { generate_label(option, ()=>{}, null) } </div>
+                    <div className='marking_options' key={'div_' + option}> { generate_label(option, ()=>{}, null) } </div>
                 ))
             }
         </div>

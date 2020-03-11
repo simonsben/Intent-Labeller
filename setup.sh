@@ -14,12 +14,15 @@ npm run build
 cd "server/database_utilities"
 
 # Install sqlite3
-bash install_sqlite.sh
+CURRENT_SQLITE=$(which sqlite3)
+if [ -z "$CURRENT_SQLITE" ]; then
+    bash "install_sqlite.sh";
+fi
 
 # Generate database
-bash make_database.sh
+bash "make_database.sh";
 
 # Generate keys
-bash generate_keys.sh
+bash "generate_keys.sh";
 
 echo "Setup complete."

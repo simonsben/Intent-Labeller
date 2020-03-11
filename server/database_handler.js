@@ -97,7 +97,6 @@ let database_handler = {
                             intent,
                             abuse
                         ];
-                        console.log('label package', package)
     
                         return database_handler.run(queries.insert_label, package)
                     })

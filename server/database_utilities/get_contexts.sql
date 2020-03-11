@@ -7,17 +7,17 @@ WHERE context_id NOT IN (
         FROM (
             SELECT context_id, COUNT(*) as label_count
             FROM label
-            WHERE intent_label != "SKIP" AND context_id NOT IN (
-                SELECT context_id
-                FROM label
-                WHERE user_id = ?
-                GROUP BY context_id
-            )
+            WHERE intent_label != "SKIP"
             GROUP BY context_id, intent_label
         )
         GROUP BY context_id
         HAVING max_votes >= 3
     )
+) AND context_id NOT IN (
+    SELECT context_id
+    FROM label
+    WHERE user_id = 1
+    GROUP BY context_id
 )
 ORDER BY context_id
 LIMIT 5;

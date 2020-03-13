@@ -14,7 +14,8 @@ const Purpose = props => {
     const header = 'Overview of research:';
     const body = (
         <Fragment>
-            There is currently the largest collection of information ever amassed by humans, much of which is in the form of human generated text. 
+            The digitization of information now enables humans to have access to more information than at any other time in recorded history.
+            Much of this information is unstructured human generated text from sources such as social media sites.
             Said text contains the past, present, and most importantly future thoughts and intentions of the writer. 
             By predicting or identifying the presence of abusive intent in text it could aid social media sites to better moderate and/or diffuse arguments. 
             This is increasingly necessary due to the social division and frequency of threatening comments on social media sites.
@@ -45,7 +46,7 @@ const Warning = props => {
             Should you stop before labelling all given documents some of the labels may be saved and used.
             After starting the labelling, you will be unable to request your labels (i.e. data) be deleted since the submissions are anonymous.
             Please note that the Queen's General Research Ethics Board (GREB) may request access to study data to ensure that the researcher(s) have or are meeting their ethical obligations in conducting this research.
-            Please understand that your participation in the study is entirely voluntary and you have not waived any legal rights by consenting to participate. <br/><br/>
+            Please understand that your participation in the study is entirely voluntary and you would not waive any legal rights by consenting to participate. <br/><br/>
 
             If you have any ethics concerns please contact the General Research Ethics Board (GREB) at 1-844-535-2988 (Toll free in North America) or email <a href='mailto:chair.GREB@queensu.ca'>chair.GREB@queensu.ca</a>.
             Call 1-613-533-2988 if outside North America. 

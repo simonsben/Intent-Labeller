@@ -2,7 +2,7 @@
 -- Author:        Ben
 -- Caption:       New Model
 -- Project:       Name of the project
--- Changed:       2020-02-19 12:33
+-- Changed:       2020-03-18 18:34
 -- Created:       2020-01-19 20:55
 PRAGMA foreign_keys = OFF;
 
@@ -26,7 +26,7 @@ CREATE TABLE "labelling_database"."context"(
 CREATE TABLE "labelling_database"."visit"(
   "visit_id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   "user_id" INTEGER NOT NULL,
-  "ip" VARCHAR(15),
+  "ip" VARCHAR(75),
   "connection_time" DATETIME,
   CONSTRAINT "visit_id_UNIQUE"
     UNIQUE("visit_id"),

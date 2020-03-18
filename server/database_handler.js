@@ -73,7 +73,7 @@ let database_handler = {
         if (send_response)
             response.sendStatus(200);   // OK status
 
-        const client_ip = request.headers['x-forwarded-for'];
+        const client_ip = request.ip;
         const { user_id } = request.user;
         const package = [user_id, client_ip];
 
@@ -121,13 +121,12 @@ let database_handler = {
             .then(last_12_h => {
                 // If user already labelled 30 in last 12 hours give them no more to label.
                 if (last_12_h.count >= max_labels_per_day) {
-                    console.log('limit hit by', request.headers['x-forwarded-for']);
+                    console.log('limit hit by', request.ip);
                     return empty_promise([[], null]);
                 }
 
                 const get_contexts = database_handler.all(queries.get_contexts, [ user_id ]);
-                const get_qualifying = database_handler.get(queries.get_qualifying, [ user_id ]);
-
+                const get_qualifying = database_handler.get(queries.get_qualifying, [ user_id ])
                 return Promise.all([ get_contexts, get_qualifying ]);
             })
             // Send contexts back to client

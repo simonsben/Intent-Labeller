@@ -12,6 +12,7 @@ const root_path = path.join(__dirname, '../build');
 
 // Initialize database and web-server
 database_handler.init();
+global.database_handler = database_handler; // Make handler accessible for auth functions
 const app = express();
 
 // Add universal middleware

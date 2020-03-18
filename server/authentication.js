@@ -49,11 +49,22 @@ const check_auth = async (request, response, next) => {
     verify(auth_token, private_key, (e, user) => {
         if (e) {
             response.sendStatus(403);
+            console.log('Bad login request from', request.headers['x-forwarded-for']);
             return;
         }
+
+        global.database_handler.check_user(user.user_id)
+            .then(check => {
+                if (!check) {
+                    response.sendStatus(403);
+                    console.log('Bad user id login request from', request.headers['x-forwarded-for']);
+                    return;
+                }
+
+                request.user = user;
+                next();
+            })
         
-        request.user = user;
-        next();
     });
 };
 

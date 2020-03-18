@@ -1,7 +1,9 @@
 const { Database } = require('sqlite3').verbose();
 const { queries } = require('./queries');
-const { error_thrower, empty_promise } = require('./utilities');
+const { error_thrower, empty_promise, shuffle } = require('./utilities');
 const { generate_token, reviver } = require('./authentication');
+
+const max_labels_per_day = 30;
 
 const run_callback = (resolve, reject) => (e) => {
     if (e)
@@ -65,6 +67,8 @@ let database_handler = {
             .catch(error_thrower);
     },
 
+    check_user: user_id => database_handler.get(queries.check_user, [ user_id ]),
+
     add_visit: (request, response, send_response=true) => {
         if (send_response)
             response.sendStatus(200);   // OK status
@@ -112,16 +116,31 @@ let database_handler = {
 
         // Insert labels if possible
         database_handler.add_labels(labels, user_id)
+            .then(() => database_handler.get(queries.get_past_count, [ user_id ]))
             // Get next set of contexts to label
-            .then(() => database_handler.all(queries.get_contexts, [ user_id ]))
+            .then(last_12_h => {
+                // If user already labelled 30 in last 12 hours give them no more to label.
+                if (last_12_h.count >= max_labels_per_day) {
+                    console.log('limit hit by', request.headers['x-forwarded-for']);
+                    return empty_promise([[], null]);
+                }
+
+                const get_contexts = database_handler.all(queries.get_contexts, [ user_id ]);
+                const get_qualifying = database_handler.get(queries.get_qualifying, [ user_id ]);
+
+                return Promise.all([ get_contexts, get_qualifying ]);
+            })
             // Send contexts back to client
-            .then(contexts => {
+            .then(([contexts, qualifying]) => {
                 // If no more data, send complete.
                 if (contexts.length == 0) {
                     response.send({ complete: true });
                     return;
                 }
-
+                                
+                contexts.push(qualifying);
+                contexts = shuffle(contexts);
+                
                 response.send({ contexts });
             })
             .catch(error_thrower)

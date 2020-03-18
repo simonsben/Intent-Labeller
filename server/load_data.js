@@ -1,47 +1,47 @@
 const { queries } = require('./queries');
 const { parse } = require('papaparse');
 const { Database } = require('sqlite3').verbose();
-const { read_file, error_thrower } = require('./utilities');
+const { read_file, error_thrower, convert_to_object, shuffle } = require('./utilities');
 
 const max_size = 3000;
-const data_file = 'subset'
+const data_file = 'labelling_contexts'
 
 // Open database
 const db = new Database('./labelling_database.sdb');
 
-let context_mapping = read_file('../data/' + data_file + '_map.csv');
-let contexts = read_file('../data/' + data_file + 's.csv');
+let load_contexts = read_file('../data/labelling_contexts.csv');
+let load_qualifiers = read_file('../data/qualifying_contexts.csv');
 
-// Wait for both files to open
-Promise.all([context_mapping, contexts])
-    .then(([mappings, contexts]) => {
-        contexts = contexts.slice(1);   // Remove file header
-
-        // Initialize index variables
-        let mapping_index = 0;
-        let context_index = 0;
+Promise.all([load_contexts, load_qualifiers])
+    .then(([raw_contexts, qualifiers]) => {
+        raw_contexts = convert_to_object(raw_contexts)
+        qualifiers = shuffle(convert_to_object(qualifiers));
 
         // Prepare query
         let query = db.prepare(queries.insert_context);
 
         // For each context
-        contexts.forEach((context, index) => {
-            context = context[1].slice(0, max_size);        // Limit maximum size
-
-            // Increment mapping index to current source document
-            while(index > mappings[mapping_index][2]) {
-                mapping_index++;
-                context_index = 0;
-            }
-
+        raw_contexts.forEach((context, index) => {
             // Package data
-            const document_id = mappings[mapping_index][0];
-            const package = [index, document_id, context_index, context];
+            let { context_id, contexts, document_index, context_index } = context;
+            contexts = contexts.slice(0, max_size);        // Limit maximum size
+            const package = [ index, document_index, context_index, contexts ];
 
             // Insert data
             query.run(package, error_thrower);
-            context_index++;
         });
+        console.log('Executed context queries.');
+
+        // For each qualifying context
+        qualifiers.forEach((qualifier, index) => {
+            const { is_intent, contexts } = qualifier;
+            const entry_index = -(index + 1)
+            const package = [ entry_index, entry_index, is_intent, contexts ]
+
+            query.run(package, error_thrower);
+        });
+        console.log('Executed qualifying queries.');
+
         // Ensure execution and close database
         query.finalize();        
         db.close();

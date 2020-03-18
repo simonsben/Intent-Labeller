@@ -48,8 +48,6 @@ const check_auth = async (request, response, next) => {
     // Check if the token can be decrypted
     verify(auth_token, private_key, (e, user) => {
         request.ip = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
-        console.log('request from', request.ip);
-
         if (e) {
             response.sendStatus(403);
             console.log('Bad login request from', request.ip);

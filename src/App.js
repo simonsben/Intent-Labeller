@@ -8,28 +8,36 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        const has_local_token = is_authenticated(this.sign_up_complete);
+        const has_local_token = is_authenticated(this.auth_update);
 
         this.state = {
             is_authenticated: has_local_token,
-            loading: has_local_token
+            loading: has_local_token,
+            labelling: false,
         }
 
-        this.sign_up_complete = this.sign_up_complete.bind(this);
+        this.continue = this.continue.bind(this);
+        this.auth_update = this.auth_update.bind(this);
     }
 
-    sign_up_complete = ( is_authenticated ) => {
-        console.log('Authenticate', is_authenticated);
-        this.setState({ ...[this.state], is_authenticated, loading: false });
-    }
+    auth_update = ( is_authenticated ) => {
+        console.log('Authenticated:', is_authenticated);
+        const { state } = this;
+        this.setState({ ...state, is_authenticated, loading: false, labelling: !state.loading });
+    };
+    continue = () => this.setState({ ...this.state, labelling: true });
 
     render() {
-        const { is_authenticated, loading } = this.state;
+        const { is_authenticated, loading, labelling } = this.state;
         return (
             <div className='base_container'>
                 {
-                    !is_authenticated?
-                    <Login loading={ loading } sign_up_complete={ this.sign_up_complete } />
+                    ( !labelling || !is_authenticated )?
+                    <Login 
+                        loading={ loading } 
+                        is_authenticated={ is_authenticated } 
+                        continue={ this.continue } 
+                        auth_update={this.auth_update} />
                     :
                     <Labeller />
                 }

@@ -2,7 +2,7 @@ import { post } from 'axios';
 
 const token_name = 'auth_token'
 
-const sign_up = (user_type, signup_error) => {
+const sign_up = (user_type) => {
     const payload = { user_type };
 
     return post('/signup', payload)
@@ -10,7 +10,6 @@ const sign_up = (user_type, signup_error) => {
             const { auth_token } = response.data;
             localStorage.setItem(token_name, auth_token);
         })
-        .catch(() => signup_error())
 }
 
 // Check if user is authenticated

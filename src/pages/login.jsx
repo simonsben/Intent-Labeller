@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import InputField from '../components/input_field';
 import { Warning, Instructions, FinalNote, Purpose } from '../components/information';
 import { sign_up } from '../actions/authentication';
@@ -10,7 +10,7 @@ class Login extends Component {
 
         this.state = {
             user_type: '',
-            loading: props.loading,
+            waiting_for_auth: false,
             fail: false
         };
 
@@ -24,11 +24,16 @@ class Login extends Component {
     }
 
     submit = () => {
-        const { user_type } = this.state;
-        sign_up(user_type, this.sign_up_error)
-            .then(() => this.props.sign_up_complete(true))
+        const { state, props } = this;
+        if (props.is_authenticated) {
+            props.continue();
+            return;
+        }
+        sign_up(state.user_type)
+            .then(() => props.auth_update(true))
+            .catch(() => this.sign_up_error);
         
-        this.setState({...[this.state], loading: true});
+        this.setState({...this.state, loading: true});
     }
 
     sign_up_error = () => {
@@ -36,9 +41,12 @@ class Login extends Component {
     }
 
     render() {
-        const {state} = this;
+        const { state, props } = this;
+
         
         const user_type_change = new_value => this.input_change('user_type', new_value);
+        const continue_text = this.props.is_authenticated? 'Continue.' : 'Acknowledge and begin.';
+        const waiting_for_auth = state.waiting_for_auth || props.loading;
 
         return (
             <div className='container'>
@@ -48,11 +56,22 @@ class Login extends Component {
                     <Purpose />
                     <Warning />
                     <Instructions />
-                    <FinalNote />
-                    <InputField value={ state.user_type } on_change={ user_type_change } name={ 'referral code' }/>                    
+                    {
+                        !props.is_authenticated?
+                        <Fragment>
+                            <FinalNote />
+                            <InputField 
+                                value={ state.user_type } 
+                                on_change={ user_type_change } 
+                                name={ 'referral code' }
+                                />
+                        </Fragment>
+                        :
+                        null
+                    }
                     
                     <div className='submit'>
-                        <input type='button' value='Acknowledge and begin.' onClick={this.submit} disabled={ state.loading } />
+                        <input type='button' value={ continue_text } onClick={ this.submit } disabled={ waiting_for_auth } />
                     </div>
                 </div>
             </div>

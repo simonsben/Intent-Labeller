@@ -64,7 +64,7 @@ const Instructions = props => {
     const header = 'Instructions:';
     const body = (
         <Fragment>
-            Thank you for your interest in helping to label data, the process should take you no longer than 20 minutes and are free to stop at any time.
+            Thank you for your interest in helping to label data, the process should take you no longer than 20 minutes and you are free to stop at any time.
             As said above, the purpose of this is to identify text that contains intent and/or abuse. 
             In the study, abusive language is defined as an insult or hate speech. 
             Intent can be thought of as text where the author expresses an intention or desire to do something <b>in the future</b>. 
@@ -72,8 +72,8 @@ const Instructions = props => {
             Some other examples of intentful language are:
 
             <ul>
-                <li>"I wish I can ### you head off an ..." (since they wish to do something) </li>
-                <li>"I want the ###### ###### arrested" (since they want something to happen) </li>
+                <li>"I am going to #### ..." (since theyre going to do something) </li>
+                <li>"I want to ##### ..." (since they want something to happen) </li>
                 <li>"I'd love to see some ..." (since they want to see something) </li>
             </ul>
 

@@ -72,7 +72,7 @@ const Instructions = props => {
             Some other examples of intentful language are:
 
             <ul>
-                <li>"I am going to #### ..." (since theyre going to do something) </li>
+                <li>"I am going to #### ..." (since they're going to do something) </li>
                 <li>"I want to ##### ..." (since they want something to happen) </li>
                 <li>"I'd love to see some ..." (since they want to see something) </li>
             </ul>
@@ -80,9 +80,9 @@ const Instructions = props => {
             Some examples of documents that don't contain intent are:
 
             <ul>
-                <li>"I don't want to go to the zoo tomorrow" (since they don't want ...) </li>
-                <li>"hello I have not received an activation email thanks" (since the author is not expressing a desire/intention) </li>
-                <li>"I felt like yelling out to them ..." (since this is a statement on a past feeling) </li>
+                <li>"I don't want to go to the ..." (since they don't want ...) </li>
+                <li>"hello I have not received ..." (since the author is not expressing a desire/intention) </li>
+                <li>"I felt like ####### ..." (since this is a statement on a past feeling) </li>
             </ul>
 
             When labelling a document you will be asked to label whether a document contains intent and whether it contains abuse (separately).

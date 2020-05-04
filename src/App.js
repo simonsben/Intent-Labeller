@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import Login from './pages/login';
 import Labeller from './pages/labeller';
+import Complete from './pages/complete';
 import { is_authenticated } from './actions/authentication';
+
+const is_complete = true;
 
 
 class App extends Component {
     constructor(props) {
         super(props);
 
-        const has_local_token = is_authenticated(this.auth_update);
+        const has_local_token = is_complete? false : is_authenticated(this.auth_update);
 
         this.state = {
             is_authenticated: has_local_token,
@@ -28,6 +31,9 @@ class App extends Component {
     continue = () => this.setState({ ...this.state, labelling: true });
 
     render() {
+        if (is_complete)
+            return <Complete />
+
         const { is_authenticated, loading, labelling } = this.state;
         return (
             <div className='base_container'>

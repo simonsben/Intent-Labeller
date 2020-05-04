@@ -8,11 +8,10 @@ const { check_auth, reviver } = require('./authentication');
 
 // Set to production environment
 process.env.NODE_ENV = 'production';
+const complete = true;
 const root_path = path.join(__dirname, '../build');
 
 // Initialize database and web-server
-database_handler.init();
-global.database_handler = database_handler; // Make handler accessible for auth functions
 const app = express();
 
 // Add universal middleware
@@ -29,14 +28,20 @@ app.get('/', (request, response) => {
     );
 });
 
-// Handle new users
-app.post('/signup', database_handler.new_user);
+// If research is complete, don't add additional endpoints.
+if (!complete) {
+    database_handler.init();
+    global.database_handler = database_handler; // Make handler accessible for auth functions
 
-// Handle logins/authentication checks
-app.post('/login', check_auth, database_handler.add_visit);
-
-// Handle content requests
-app.get('/get_content', check_auth, database_handler.get_contexts);
+    // Handle new users
+    app.post('/signup', database_handler.new_user);
+    
+    // Handle logins/authentication checks
+    app.post('/login', check_auth, database_handler.add_visit);
+    
+    // Handle content requests
+    app.get('/get_content', check_auth, database_handler.get_contexts);
+}
 
 // Add ability to resolve other paths
 app.use(express.static(root_path));

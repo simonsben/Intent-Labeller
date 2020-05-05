@@ -1,4 +1,4 @@
-# Data labeller
+![](banner.png)
 
 This is a data labelling web-application built to enable anonymous data labelling to support my Master's research.
 Specifically, the site enabled participants to label short sections of text as containing or not-containing intent.

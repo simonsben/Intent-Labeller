@@ -20,6 +20,8 @@ For more information about the projects dependencies look at the [package file](
 To setup the site:
 
 * Clone the repo
+* Get a data file to fill the database from
+* Fill in the [greenlock config file](server/greenlock.d/config_template.json) and rename to `config.json`
 * Install npm
 * Install dependencies, build the site, build database, and generate keys by running `setup.sh`
 

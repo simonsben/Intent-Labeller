@@ -12,6 +12,7 @@
 /build
 *.db
 .greenlockrc
+*greenlock*
 
 # misc
 .DS_Store

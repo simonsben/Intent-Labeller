@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ![](banner.png)
+=======
+# Intent Labeller
+>>>>>>> de5aa60bdb13d3b769c6577a94fc3e6842b735fc
 
 This is a data labelling web-application built to enable anonymous data labelling to support my Master's research.
 Specifically, the site enabled participants to label short sections of text as containing or not-containing intent.
